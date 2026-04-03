@@ -13,7 +13,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=nextdotjs)
 ![Maven](https://img.shields.io/badge/Maven-3.9+-red?style=for-the-badge&logo=apachemaven)
 
-A distributed, event-driven competitive programming platform built with Java microservices. Supports real-time leaderboards, OAuth2 authentication, sandboxed code execution across multiple languages, and Codeforces-style scoring — designed as a production-grade learning system.
+A distributed, event-driven competitive programming platform built with Java microservices. Supports real-time leaderboards, OAuth2 authentication, sandboxed code execution across multiple languages, and Codeforces-style scoring and AI-driven contest analytics — designed as a production-grade learning system.
 
 ---
 
@@ -154,7 +154,17 @@ sequenceDiagram
 Each backend service maintains its own PostgreSQL database. There are no shared databases and no synchronous inter-service HTTP calls.
 
 ---
+## AI-Powered Contest Analytics
 
+Based on the JSON data, the Gemini model can generate the following insights:
+
+- **The Decisive Problem:** Identify which problem acted as the main separator among the top participants. For example, if Problem C had an acceptance rate of only 12%, it may have been the ultimate tie-breaker for the top 10% of contestants.
+
+- **Time Management Analysis:** Examine how the winner's submission strategy contributed to their rank. For example, solving Problems A and B very quickly to reduce penalty time may have been the key factor behind their victory.
+
+- **Difficulty Calibration:** Provide feedback for contest organizers by comparing the intended difficulty of a problem with its actual performance. For instance, a problem labeled as "Medium" may have statistically behaved like a "Hard" problem if very few participants solved it.
+
+---
 ## Tech Stack
 
 | Layer | Technology |
