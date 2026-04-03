@@ -1,0 +1,79 @@
+# ===============================
+# SERVER & SERVICE IDENTITY
+# ===============================
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+
+  # ===============================
+  # DYNAMIC IP FIX (The "NXDOMAIN" Killer)
+  # ===============================
+  # This ensures the Gateway finds the service even on systems with multiple adapters (WSL/Docker)
+  cloud:
+    inetutils:
+      ignored-interfaces: [eth.*, vEthernet.*]
+      preferred-networks: [172.24, 192.168]
+      use-only-site-local-interfaces: true
+
+  # ===============================
+  # DATABASE (PostgreSQL)
+  # ===============================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth_db?serverTimezone=Asia/Kolkata
+    username: postgres
+    password: your_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # ===============================
+  # OAUTH2 & SECURITY
+  # ===============================
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: [email, profile]
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: [user:email, read:user]
+        provider:
+          linkedin:
+            authorization-uri: https://www.linkedin.com/oauth/v2/authorization
+            token-uri: https://www.linkedin.com/oauth/v2/accessToken
+            user-info-uri: https://api.linkedin.com/v2/me
+            user-name-attribute: id
+
+# ===============================
+# SERVICE DISCOVERY (Eureka Client)
+# ===============================
+eureka:
+  instance:
+    prefer-ip-address: true
+    # Same naming logic as your Execution Service
+    instance-id: ${spring.application.name}:${server.port}:${spring.cloud.client.ip-address}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+
+# ===============================
+# JWT SETTINGS
+# ===============================
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expiration: 86400000 # 1 day

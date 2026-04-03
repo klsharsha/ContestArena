@@ -1,0 +1,78 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: leaderboard-service
+
+  # ===============================
+  # DYNAMIC IP FIX
+  # ===============================
+  cloud:
+    inetutils:
+      ignored-interfaces: [eth.*, vEthernet.*]
+      preferred-networks: [172.24, 192.168]
+      use-only-site-local-interfaces: true
+
+  # ===============================
+  # DATABASE (PostgreSQL)
+  # ===============================
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/leaderboard_db?serverTimezone=UTC}
+    username: postgres
+    password: your_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # ===============================
+  # KAFKA (Consuming Results)
+  # ===============================
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: leaderboard-service-v6
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: "*"
+        # This ignores the package name sent by the Execution Service
+        spring.json.use.type.headers: false
+        # Ensure this matches your ACTUAL package path below
+        spring.json.value.default.type: "com.contest.leaderboard_service.dto.SubmissionResultEvent"
+
+  # ===============================
+  # REDIS (For Fast Ranking)
+  # ===============================
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# ===============================
+# EUREKA (Top Level)
+# ===============================
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}:${spring.cloud.client.ip-address}
+
+logging:
+  level:
+    com.contest.leaderboard_service: DEBUG
+    org.springframework.kafka: INFO
+    org.hibernate.SQL: DEBUG
