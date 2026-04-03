@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+
+  java-runner:
+    build: ./dockercompilers/java-runner
+    image: java-runner
+
+  python-runner:
+    build: ./dockercompilers/python-runner
+    image: python-runner
+
+  c-runner:
+    build: ./dockercompilers/c-runner
+    image: c-runner
+
+  cpp-runner:
+    build: ./dockercompilers/cpp-runner
+    image: cpp-runner
+
+  js-runner:
+    build: ./dockercompilers/javascript-runner
+    image: js-runner
+
+
