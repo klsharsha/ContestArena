@@ -472,9 +472,9 @@ contest-manager/
 
 ## Roadmap
 
-- [x] Auth Service — OAuth2, JWT, user identity
-- [x] Contest Service — contest and problem lifecycle, Kafka publisher
-- [x] Leaderboard Service — scoring engine, Redis ranking, WebSocket broadcast
+- [ ] Auth Service — OAuth2, JWT, user identity
+- [ ] Contest Service — contest and problem lifecycle, Kafka publisher
+- [ ] Leaderboard Service — scoring engine, Redis ranking, WebSocket broadcast
 - [ ] Execution Service — Docker sandbox runners, RabbitMQ worker
 - [ ] Frontend — contest pages, Monaco code editor, live leaderboard UI
 - [ ] API Gateway — JWT validation middleware, rate limiting
@@ -497,7 +497,10 @@ contest-manager/
 The Execution Service builds on **CompileEngine** — an earlier standalone project that implemented the full Docker sandboxing and async execution pipeline with RabbitMQ. contest-manager integrates that system into the broader distributed platform by wiring it into Kafka, giving the Leaderboard Service real-time verdicts and enabling the live ranking system.
 
 ---
-
+## Contributors
+- [klsharsha](https://github.com/klsharsha)
+- [Prashanth291](https://github.com/Prashanth291)  
+---
 ## License
 
 Personal learning project. Not licensed for commercial use.
